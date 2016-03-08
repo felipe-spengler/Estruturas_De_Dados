@@ -9,7 +9,7 @@ int main()
 
     p = (int *) malloc(5 * sizeof(int));
     if (p == NULL){
-        printf("\Memória insuficiente\n");
+        printf("\nMemória insuficiente\n");
         exit(1);
     }
     do{
@@ -27,7 +27,7 @@ int main()
             if (qnt > 5){
                 p = (int *) realloc(p,(qnt + 1) * sizeof(int));
                if (p == NULL){
-                    printf("\Memória insuficiente\n");
+                    printf("\nMemória insuficiente\n");
                     exit(1);
                 }
             }
