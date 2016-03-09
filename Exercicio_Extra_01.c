@@ -36,7 +36,7 @@ int main()
         coluna = col_digitadas[i];
         for (j = 0; j < col_digitadas[i]; j++){
             printf("Linha %d Coluna %d \n"
-                   "Memoria %x Valor %d\n", i, j, &linhas[i][j], linhas[i][j]);
+                   "Memoria %p Valor %d\n", i, j, &linhas[i][j], linhas[i][j]);
 
         }
     }
