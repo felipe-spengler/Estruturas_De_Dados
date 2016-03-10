@@ -4,10 +4,10 @@
 int main()
 {
     int *p;
-    int i, valor, qnt = 0, saida = 0;
+    int i, valor, qnt = 0, saida = 0, tamanho = 5;
     char digitado[50];
 
-    p = (int *) malloc(5 * sizeof(int));
+    p = (int *) malloc(tamanho * sizeof(int));
     if (p == NULL){
         printf("\nMemória insuficiente\n");
         exit(1);
@@ -25,11 +25,12 @@ int main()
         }
         if (saida != 1){
             if (qnt > 5){
-                p = (int *) realloc(p,(qnt + 1) * sizeof(int));
+                p = (int *) realloc(p,(tamanho + 5) * sizeof(int));
                if (p == NULL){
                     printf("\nMemória insuficiente\n");
                     exit(1);
                 }
+                tamanho += 5;
             }
             p[qnt] = atoi(digitado);
             qnt++;
