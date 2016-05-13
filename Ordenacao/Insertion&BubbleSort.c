@@ -6,54 +6,54 @@ typedef struct node{
     struct node *prox;
     struct node *antes;
     int info;
-}val;
-void imprime (val *p){
-    if (p == NULL){
+}node;
+void imprime (node *ponteiro){
+    if (ponteiro == NULL){
 		printf("Lista nulla");
 	}else{
-		for ( ; p != NULL; p = p->prox){
-			printf(" %d ", p->info);
+		for ( ; ponteiro != NULL; ponteiro = ponteiro->prox){
+			printf(" %d ", ponteiro->info);
 		}
 	}
 }
 
-val *rol_bolha (val *p){
-  int troca = 0, aux;
-  val *i;
+node *ordena_bubble (node *ponteiro){
+  int troca = 0, valor_aux;
+  node *node_aux;
   do{
     troca = 0;
-    for (i = p->prox; i != NULL; i = i->prox){
-      if (i->info < i->antes->info){
+    for (node_aux = ponteiro->prox; node_aux != NULL; node_aux = node_aux->prox){
+      if (node_aux->info < node_aux->antes->info){
         troca = 1;
-        aux = i->info;
-        i->info= i->antes->info;
-        i->antes->info = aux;
+        valor_aux = node_aux->info;
+        node_aux->info= node_aux->antes->info;
+        node_aux->antes->info = valor_aux;
 
       }
     }
 
   }while (troca != 0);
-  return p;
+  return ponteiro;
 }
 
-val *rol_insertion (val *p){
-    val *aux = p->prox, *i;
+node *ordena_insertion (node *ponteiro){
+    node *percorre = ponteiro->prox, *node_aux;
     int chave = 0;
-    for ( ; aux != NULL;aux = aux->prox){
-        chave = aux->info;
-        i = aux->antes;
-        while (i != NULL && chave < i->info){
-            i->prox->info = i->info;
-            i = i->antes;
+    for ( ; percorre != NULL; percorre = percorre->prox){
+        chave = percorre->info;
+        node_aux = percorre->antes;
+        while (node_aux != NULL && chave < node_aux->info){
+            node_aux->prox->info = node_aux->info;
+            node_aux = node_aux->antes;
         }
-        if (i == NULL) p->info = chave;
-        else i->prox->info = chave;
+        if (node_aux == NULL) ponteiro->info = chave;
+        else node_aux->prox->info = chave;
     }
-    return p;
+    return ponteiro;
 }
-val *insere_valor (val *novo, int valor){
-    val *aux = NULL;
-    aux = malloc(sizeof(val));
+node *insere_valor (node *novo, int valor){
+    node *aux = NULL;
+    aux = malloc(sizeof(node));
 
     aux->prox = novo;
     aux->info = valor;
@@ -65,8 +65,8 @@ val *insere_valor (val *novo, int valor){
     return aux;
 }
 
-val *carrega (){
-    val *novo = NULL;
+node *entrada_valores (){
+    node *novo = NULL;
     int valor, i;
     //printf("Digite 5 valores:  ");
     for (i = 0; i < 20; i++){
@@ -79,19 +79,19 @@ val *carrega (){
 int main()
 {
     srand(time(NULL));
-    val *p = NULL;
+    node *ponteiro = NULL;
     clock_t cont_bolha, cont_insert;
     clock_t tempo[2];
     double Tempo;
 
-    p = carrega();
+    ponteiro = entrada_valores();
     printf("ADD: \n");
-    imprime(p);
+    imprime(ponteiro);
 
     tempo[0] = clock();
     printf("\n\nInsertion Sort: \n");
-    p = rol_insertion(p);
-    imprime(p);
+    ponteiro = ordena_insertion(ponteiro);
+    imprime(ponteiro);
     tempo[1] = clock();
 
     Tempo = (tempo[1] - tempo[0]) * 1000.0 / CLOCKS_PER_SEC;
@@ -99,8 +99,8 @@ int main()
 
     tempo[0] = clock();
     printf("\Bubble Sort: \n");
-    p = rol_bolha(p);
-    imprime(p);
+    ponteiro = ordena_bubble(ponteiro);
+    imprime(ponteiro);
     tempo[1] = clock();
 
     Tempo = (tempo[1] - tempo[0]) * 1000.0 / CLOCKS_PER_SEC;
