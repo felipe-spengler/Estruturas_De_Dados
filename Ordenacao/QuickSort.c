@@ -1,63 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-
-typedef struct _node{
-    struct _node *prox;
-    struct _node *antes;
+typedef struct _node {
+    struct node *next;
+    struct node *antes;
     int info;
 } node;
-typedef struct _list{
-    struct _node *first;
-    struct _node *last;
-} list;
+typedef struct principal{
+    struct node *inicio;
+    struct node *fim;
+}geral;
 
-void imprime (list *ponteiro){
-    node *aux = ponteiro->first;
+node *partition(node *first, node *last) {
+    node *pivot = first, *esq = first->next, *dir = last;
+    int t, chave = 1;
 
-    if (aux == NULL){
-        printf("Lista nulla");
+   if (first == NULL) return NULL;
+
+   while(chave){
+        while (esq->info < pivot->info){
+            esq = esq->next;
+        }
+        while (dir->info > pivot->info){
+            if (dir == esq) chave = 0;
+            dir = dir->antes;
+        }
+        if (esq->info < dir->info){
+            t = esq->info;
+            esq->info = dir->info;
+            dir->info = t;
+
+        }
+        if (chave == 0){
+            t = pivot->info;
+            pivot->info = dir->info;
+            dir->info = t;
+        }
+   }
+   return dir;
+}
+void imprime (geral *ponteiro){
+    if (ponteiro == NULL){
+        printf(" Null\n");
     }else{
-        for ( ; aux != NULL; aux = aux->prox){
+        node *aux = ponteiro->inicio;
+        for ( ; aux != NULL; aux = aux->next){
             printf(" %d ", aux->info);
         }
     }
 }
-
-void quick_sort(list *ponteiro, node *primeiro, node *ultimo) {
-    node *i, *j, *pivo;
-    int z;
-    //int i, j, x, y;
-    i = primeiro;
-    j = ultimo;
-    pivo = primeiro;
-
-    while(i != j) {
-        while(i->info < pivo->info && i != ultimo) {
-            i = i->prox;
-        }
-        while(j->info > pivo->info && j != primeiro) {
-            j = j->antes;
-        }
-        if(i != j) {
-            z = i->info;
-            i->info = j->info;
-            j->info = z;
-            i = i->prox;
-            j = j->antes;
-        }
-    }
-    // mudado > para !=
-    if(j != primeiro) {
-        quick_sort(ponteiro, primeiro, j);
-    }
-    // mudado < para !=
-    if(i != ultimo) {
-        quick_sort(ponteiro, i, ultimo);
-    }
-}
-
-list *insere_valor (list *ponteiro, int valor){
+geral *insere_valor (geral *ponteiro, int valor){
     node *novo = NULL;
     novo = malloc (sizeof(node));
 
@@ -65,17 +56,17 @@ list *insere_valor (list *ponteiro, int valor){
 
     novo->info = valor;
     novo->antes = NULL;
-    if (ponteiro->first != NULL){
-        novo->prox = ponteiro->first;
+    if (ponteiro->inicio != NULL){
+        novo->next = ponteiro->inicio;
     }else{
-        novo->prox = NULL;
-        ponteiro->last = novo;
+        novo->next = NULL;
+        ponteiro->fim = novo;
     }
-    ponteiro->first = novo;
+    ponteiro->inicio = novo;
 
     return ponteiro;
 }
-list *entrada_valores (list *ponteiro){
+geral *entrada_valores (geral *ponteiro){
 
     int valor, i;
     printf("Digite 5 valores:  ");
@@ -85,17 +76,27 @@ list *entrada_valores (list *ponteiro){
     }
     return ponteiro;
 }
+void quickSort(geral *ponteiro, node *first, node *last){
+   node *j;
+
+   if( first != last ){
+        j = partition(first, last);
+        quickSort(ponteiro, first, j->antes);
+        quickSort(ponteiro, j->next, last);
+   }
+}
+
 int main()
 {
+    geral *mestre = malloc (sizeof(geral));
+    mestre->fim = mestre->inicio = NULL;
 
-    list *ponteiro = NULL;
-    ponteiro = malloc (sizeof(list));
-    ponteiro->first = ponteiro->last = NULL;
-    ponteiro = entrada_valores(ponteiro);
-    printf("ADD: \n");
-    imprime(ponteiro);
-    printf("Quick: \n");
-    quick_sort(ponteiro, ponteiro->first, ponteiro->last);
+    mestre = entrada_valores(mestre);
+    printf("Antes : \n");
+    imprime(mestre);
+
+    printf("Depois: \n");
+    quickSort(mestre, mestre->inicio, mestre->fim);
 
     return 0;
 }
