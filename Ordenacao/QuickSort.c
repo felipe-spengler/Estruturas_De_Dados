@@ -17,17 +17,20 @@ node *partition(node *first, node *last) {
    if (first == NULL) return NULL;
 
    while(chave){
-        while (esq->info < pivot->info){
+        while (esq->info < pivot->info && esq != last){
             esq = esq->next;
         }
-        while (dir->info > pivot->info){
+        while (dir->info > pivot->info && dir != first ){
             if (dir == esq) chave = 0;
             dir = dir->antes;
         }
-        if (esq->info < dir->info){
+  
+        if (esq->info > dir->info){
             t = esq->info;
             esq->info = dir->info;
             dir->info = t;
+
+            printf("Troca\n");
 
         }
         if (chave == 0){
@@ -47,32 +50,31 @@ void imprime (geral *ponteiro){
             printf(" %d ", aux->info);
         }
     }
-}
-geral *insere_valor (geral *ponteiro, int valor){
-    node *novo = NULL;
-    novo = malloc (sizeof(node));
-
-    if (novo == NULL) exit(1);
-
-    novo->info = valor;
-    novo->antes = NULL;
-    if (ponteiro->inicio != NULL){
-        novo->next = ponteiro->inicio;
-    }else{
-        novo->next = NULL;
-        ponteiro->fim = novo;
-    }
-    ponteiro->inicio = novo;
-
-    return ponteiro;
-}
-geral *entrada_valores (geral *ponteiro){
-
+}geral *entrada_valores (geral *ponteiro){
     int valor, i;
+    node *pFim, *novo;
     printf("Digite 5 valores:  ");
     for (i = 0; i < 5; i++){
         scanf(" %d", &valor);
-        ponteiro = insere_valor(ponteiro, valor);
+        novo = malloc (sizeof(node));
+
+        if (novo == NULL) exit(1);
+
+        novo->info = valor;
+        novo->next = NULL;
+
+        if (ponteiro->inicio == NULL){
+            novo->antes = NULL;
+            ponteiro->inicio = novo;
+            ponteiro->fim = novo;
+
+        }else{
+            pFim = ponteiro->fim;
+            pFim->next = novo;
+            novo->antes = ponteiro->fim;
+
+            ponteiro->fim = novo;
+        }
     }
     return ponteiro;
 }
