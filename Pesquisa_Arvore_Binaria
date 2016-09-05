@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no{
+    struct nodo *direta;
+    struct nodo *esquerda;
+    int info;
+
+} nodo;
+
+nodo *inicia_arvore(){
+    return NULL;
+}
+nodo *aloca_no(int valor){
+    nodo *novo = malloc(sizeof(nodo));
+    novo->direta = NULL;
+    novo->esquerda = NULL;
+    novo->info = valor;
+}
+void insereValor(int valor, nodo *raiz){
+    if (raiz != NULL){
+        if (valor > raiz->info){
+            if (raiz->direta != NULL){
+                insereValor(valor, raiz->direta);
+            }
+        }else if (valor < raiz->info){
+            if (raiz->esquerda != NULL)
+            insereValor(valor, raiz->direta);
+        }
+    }
+    nodo *novo = aloca_no(valor);
+
+    if (raiz == NULL) raiz = novo;
+    else if (raiz->info < valor) raiz->esquerda = novo;
+    else if (raiz->info > valor) raiz->esquerda = novo;
+
+}
+void imprimePreEsquerda(nodo *raiz){
+    if (raiz != NULL){
+        printf(" %d ", raiz->info );
+    }
+    imprimePreEsquerda (raiz->esquerda);
+    imprimePreEsquerda (raiz->direita);
+
+}
+
+int main()
+{
+    nodo *raiz;
+    int valorRaiz;
+    raiz = inicia_arvore();
+    printf("Digite o valor que ocupara a raiz: ");
+    scanf(" %d", &valorRaiz);
+    raiz = aloca_raiz(valorRaiz);
+
+    do {
+
+
+    }while(menu != 5);
+
+    return 0;
+}
